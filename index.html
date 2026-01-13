@@ -1,82 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-    :root {
-        --estate: #2c3e50;
-        --tax: #c0392b;
-        --business: #2980b9;
-        --realestate: #27ae60;
-    }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: transparent; }
-    
-    .container { position: relative; width: 500px; height: 500px; }
-    
-    .circle {
-        position: absolute;
-        width: 250px;
-        height: 250px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        transition: all 0.3s ease;
-        opacity: 0.8;
-        cursor: pointer;
-        text-align: center;
-        padding: 20px;
-    }
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: transparent; overflow: hidden; }
+        .wrapper { position: relative; width: 600px; height: 600px; }
+        
+        /* The SVG circles */
+        .circle { fill-opacity: 0.15; stroke-width: 2; transition: all 0.3s ease; cursor: pointer; }
+        .circle:hover { fill-opacity: 0.4; stroke-width: 3; }
+        
+        /* Labels for main areas */
+        .label { font-weight: bold; font-size: 14px; pointer-events: none; fill: #333; text-transform: uppercase; letter-spacing: 1px; }
 
-    /* Positioning the 4 areas */
-    .top { top: 50px; left: 125px; background: var(--estate); }
-    .right { top: 125px; right: 50px; background: var(--tax); }
-    .bottom { bottom: 50px; left: 125px; background: var(--business); }
-    .left { top: 125px; left: 50px; background: var(--realestate); }
+        /* The Info Box in the Center */
+        #info-box {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            z-index: 100;
+        }
+        #info-title { font-weight: bold; color: #1a2a6c; margin-bottom: 5px; font-size: 16px; }
+        #info-text { font-size: 12px; color: #666; line-height: 1.4; }
 
-    .center-box {
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        width: 180px;
-        height: 180px;
-        background: white;
-        border: 2px solid #ddd;
-        border-radius: 10px;
-        z-index: 10;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 15px;
-        font-size: 14px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    /* Interactivity */
-    .circle:hover { opacity: 1; transform: scale(1.05); z-index: 11; }
-    
-    /* We use data attributes to change the center text */
-    .circle:hover ~ .center-box #display-text { content: attr(data-info); }
-</style>
+        /* Colors */
+        .real-estate { fill: #27ae60; stroke: #27ae60; }
+        .tax { fill: #c0392b; stroke: #c0392b; }
+        .business { fill: #2980b9; stroke: #2980b9; }
+        .estate { fill: #8e44ad; stroke: #8e44ad; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="circle top" onmouseover="update('Estate: Protecting wealth through multi-generational planning and trusts.')">ESTATE</div>
-    <div class="circle right" onmouseover="update('Tax: Integrating federal policy with deal structures to maximize retention.')">TAX</div>
-    <div class="circle bottom" onmouseover="update('Business: Corporate governance, entity formation, and operational scaling.')">BUSINESS</div>
-    <div class="circle left" onmouseover="update('Real Estate: Commercial acquisitions, leasing, and title protection.')">REAL ESTATE</div>
-    
-    <div class="center-box">
-        <p id="display-text">Hover over a practice area to see how our strategies intersect.</p>
+<div class="wrapper">
+    <div id="info-box">
+        <div id="info-title">The Strategic Core</div>
+        <div id="info-text">Hover over an area or an intersection to see how our practice protects your interests.</div>
     </div>
+
+    <svg viewBox="0 0 500 500" width="100%" height="100%">
+        <circle class="circle real-estate" cx="250" cy="150" r="130" 
+            onmouseover="update('Real Estate', 'Acquisitions, commercial leasing, and title protection for physical assets.')" />
+        
+        <circle class="circle estate" cx="350" cy="250" r="130" 
+            onmouseover="update('Estate Planning', 'Succession, trusts, and ensuring the seamless transfer of family wealth.')" />
+        
+        <circle class="circle business" cx="250" cy="350" r="130" 
+            onmouseover="update('Business Law', 'Entity formation, operational liability, and corporate governance.')" />
+        
+        <circle class="circle tax" cx="150" cy="250" r="130" 
+            onmouseover="update('Tax Law', 'Optimizing deal structures and minimizing federal and state tax exposure.')" />
+
+        <text x="250" y="50" class="label" text-anchor="middle">Real Estate</text>
+        <text x="440" y="250" class="label" text-anchor="start">Estate</text>
+        <text x="250" y="465" class="label" text-anchor="middle">Business</text>
+        <text x="60" y="250" class="label" text-anchor="end">Tax</text>
+    </svg>
 </div>
 
 <script>
-    function update(text) {
-        document.getElementById('display-text').innerHTML = text;
+    function update(title, text) {
+        document.getElementById('info-title').innerText = title;
+        document.getElementById('info-text').innerText = text;
+        document.getElementById('info-title').style.color = getComputedStyle(document.querySelector('.' + title.toLowerCase().replace(' ', '-'))).stroke;
     }
 </script>
 
