@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Practice Area Intersections</title>
+  <style>
+    :root{
+      --ink:#0c4160;
+      --accent:#849cad;
+      --soft: rgba(12,65,96,.10);
+      --line: rgba(12,65,96,.35);
+      --panel:#0c4160;
+      --panelText:#ffffff;
+    }
+    body{
+      margin:0;
+      background:#fff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Arial, sans-serif;
+    }
+    .wrap{
+      max-width:1040px;
+      margin:0 auto;
+      padding:18px;
+    }
+    h2{
+      margin:0 0 8px;
+      color:var(--ink);
+      font-size:20px;
+      font-weight:650;
+    }
+    .sub{
+      margin:0 0 14px;
+      color:#333;
+      font-size:14px;
+      line-height:1.4;
+    }
+    .stage{
+      position:relative;
+      border:1px solid #e6e6e6;
+      border-radius:16px;
+      padding:14px;
+    }
+    svg{width:100%;height:auto;display:block}
+    .node{
+      fill:var(--soft);
+      stroke:var(--line);
+      stroke-width:2;
+    }
+    .node-label{
+      fill:var(--ink);
+      font-weight:700;
+      font-size:16px;
+    }
+    .edge{
+      stroke:var(--line);
+      stroke-width:4;
+      stroke-linecap:round;
+    }
+    .edge-hit{
+      stroke:transparent;
+      stroke-width:22;
+      cursor:pointer;
+    }
+    .edge-hit:hover + .edge{
+      stroke: rgba(12,65,96,.65);
+    }
+    .center-hit{
+      fill:rgba(12,65,96,.10);
+      stroke:rgba(12,65,96,.40);
+      stroke-width:2;
+      cursor:pointer;
+    }
+    .panel{
+      position:absolute;
+      right:14px;
+      top:14px;
+      width:min(360px, 90%);
+      background:var(--panel);
+      color:var(--panelText);
+      border-radius:14px;
+      padding:14px;
+      box-shadow:0 12px 28px rgba(0,0,0,.22);
+    }
+    .panel h3{
+      margin:0 0 6px;
+      font-size:14px;
+    }
+    .panel p{
+      margin:0;
+      font-size:13px;
+      line-height:1.4;
+    }
+    .pill{
+      display:inline-block;
+      margin-top:10px;
+      font-size:12px;
+      border:1px solid rgba(255,255,255,.25);
+      padding:4px 8px;
+      border-radius:999px;
+      opacity:.85;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>How My Practice Areas Intersect</h2>
+    <p class="sub">
+      A holistic approach means a win in a real estate deal doesn’t become a loss
+      on a tax return.
+    </p>
+
+    <div class="stage">
+      <div class="panel" id="panel">
+        <h3>Start here</h3>
+        <p>Click a connection to see how these areas overlap.</p>
+      </div>
+
+      <svg viewBox="0 0 960 560">
+        <!-- Nodes -->
+        <circle class="node" cx="220" cy="170" r="90"/>
+        <text class="node-label" x="220" y="176" text-anchor="middle">Estate</text>
+
+        <circle class="node" cx="740" cy="170" r="90"/>
+        <text class="node-label" x="740" y="176" text-anchor="middle">Tax</text>
+
+        <circle class="node" cx="220" cy="420" r="90"/>
+        <text class="node-label" x="220" y="426" text-anchor="middle">Real Estate</text>
+
+        <circle class="node" cx="740" cy="420" r="90"/>
+        <text class="node-label" x="740" y="426" text-anchor="middle">Business</text>
+
+        <!-- Click areas -->
+        <line class="edge-hit" x1="310" y1="420" x2="650" y2="420"
+          data-title="Real Estate + Business"
+          data-body="Entity formation, lease drafting, and liability alignment so ownership and contracts work together."
+          data-pill="LLC holding + lease strategy"/>
+
+        <line class="edge-hit" x1="668" y1="235" x2="292" y2="355"
+          data-title="Real Estate + Tax"
+          data-body="Transaction structure, timing, and documentation so a strong deal doesn’t become a tax problem."
+          data-pill="Win in the deal, not a loss on the return"/>
+
+        <circle class="center-hit" cx="480" cy="295" r="58"
+          data-title="Holistic Approach"
+          data-body="Planning across disciplines to avoid downstream legal, tax, or administrative problems."
+          data-pill="Designed to work together"/>
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    const panel = document.getElementById('panel');
+    document.querySelectorAll('.edge-hit, .center-hit').forEach(el => {
+      el.addEventListener('click', () => {
+        panel.innerHTML = `
+          <h3>${el.dataset.title}</h3>
+          <p>${el.dataset.body}</p>
+          <div class="pill">${el.dataset.pill}</div>
+        `;
+      });
+    });
+  </script>
+</body>
+</html>
