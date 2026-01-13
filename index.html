@@ -1,169 +1,84 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Practice Area Intersections</title>
-  <style>
-    :root{
-      --ink:#0c4160;
-      --accent:#849cad;
-      --soft: rgba(12,65,96,.10);
-      --line: rgba(12,65,96,.35);
-      --panel:#0c4160;
-      --panelText:#ffffff;
+<style>
+    :root {
+        --estate: #2c3e50;
+        --tax: #c0392b;
+        --business: #2980b9;
+        --realestate: #27ae60;
     }
-    body{
-      margin:0;
-      background:#fff;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-                   Roboto, Arial, sans-serif;
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: transparent; }
+    
+    .container { position: relative; width: 500px; height: 500px; }
+    
+    .circle {
+        position: absolute;
+        width: 250px;
+        height: 250px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        opacity: 0.8;
+        cursor: pointer;
+        text-align: center;
+        padding: 20px;
     }
-    .wrap{
-      max-width:1040px;
-      margin:0 auto;
-      padding:18px;
-    }
-    h2{
-      margin:0 0 8px;
-      color:var(--ink);
-      font-size:20px;
-      font-weight:650;
-    }
-    .sub{
-      margin:0 0 14px;
-      color:#333;
-      font-size:14px;
-      line-height:1.4;
-    }
-    .stage{
-      position:relative;
-      border:1px solid #e6e6e6;
-      border-radius:16px;
-      padding:14px;
-    }
-    svg{width:100%;height:auto;display:block}
-    .node{
-      fill:var(--soft);
-      stroke:var(--line);
-      stroke-width:2;
-    }
-    .node-label{
-      fill:var(--ink);
-      font-weight:700;
-      font-size:16px;
-    }
-    .edge{
-      stroke:var(--line);
-      stroke-width:4;
-      stroke-linecap:round;
-    }
-   .edge-hit{
-  stroke: rgba(0,0,0,0.01); 
-  stroke-width: 22;
-  cursor: pointer;
-  pointer-events: stroke;    
-}
 
-    .edge-hit:hover + .edge{
-      stroke: rgba(12,65,96,.65);
+    /* Positioning the 4 areas */
+    .top { top: 50px; left: 125px; background: var(--estate); }
+    .right { top: 125px; right: 50px; background: var(--tax); }
+    .bottom { bottom: 50px; left: 125px; background: var(--business); }
+    .left { top: 125px; left: 50px; background: var(--realestate); }
+
+    .center-box {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 180px;
+        height: 180px;
+        background: white;
+        border: 2px solid #ddd;
+        border-radius: 10px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 15px;
+        font-size: 14px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
-    .center-hit{
-      fill:rgba(12,65,96,.10);
-      stroke:rgba(12,65,96,.40);
-      stroke-width:2;
-      cursor:pointer;
-      pointer-events: all;
-    }
-    .panel{
-      position:absolute;
-      right:14px;
-      top:14px;
-      width:min(360px, 90%);
-      background:var(--panel);
-      color:var(--panelText);
-      border-radius:14px;
-      padding:14px;
-      box-shadow:0 12px 28px rgba(0,0,0,.22);
-    }
-    .panel h3{
-      margin:0 0 6px;
-      font-size:14px;
-    }
-    .panel p{
-      margin:0;
-      font-size:13px;
-      line-height:1.4;
-    }
-    .pill{
-      display:inline-block;
-      margin-top:10px;
-      font-size:12px;
-      border:1px solid rgba(255,255,255,.25);
-      padding:4px 8px;
-      border-radius:999px;
-      opacity:.85;
-    }
-  </style>
+
+    /* Interactivity */
+    .circle:hover { opacity: 1; transform: scale(1.05); z-index: 11; }
+    
+    /* We use data attributes to change the center text */
+    .circle:hover ~ .center-box #display-text { content: attr(data-info); }
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <h2>How My Practice Areas Intersect</h2>
-    <p class="sub">
-      A holistic approach means a win in a real estate deal doesn’t become a loss
-      on a tax return.
-    </p>
 
-    <div class="stage">
-      <div class="panel" id="panel">
-        <h3>Start here</h3>
-        <p>Click a connection to see how these areas overlap.</p>
-      </div>
-
-      <svg viewBox="0 0 960 560">
-        <!-- Nodes -->
-        <circle class="node" cx="220" cy="170" r="90"/>
-        <text class="node-label" x="220" y="176" text-anchor="middle">Estate</text>
-
-        <circle class="node" cx="740" cy="170" r="90"/>
-        <text class="node-label" x="740" y="176" text-anchor="middle">Tax</text>
-
-        <circle class="node" cx="220" cy="420" r="90"/>
-        <text class="node-label" x="220" y="426" text-anchor="middle">Real Estate</text>
-
-        <circle class="node" cx="740" cy="420" r="90"/>
-        <text class="node-label" x="740" y="426" text-anchor="middle">Business</text>
-
-        <!-- Click areas -->
-        <line class="edge-hit" x1="310" y1="420" x2="650" y2="420"
-          data-title="Real Estate + Business"
-          data-body="Entity formation, lease drafting, and liability alignment so ownership and contracts work together."
-          data-pill="LLC holding + lease strategy"/>
-
-        <line class="edge-hit" x1="668" y1="235" x2="292" y2="355"
-          data-title="Real Estate + Tax"
-          data-body="Transaction structure, timing, and documentation so a strong deal doesn’t become a tax problem."
-          data-pill="Win in the deal, not a loss on the return"/>
-
-        <circle class="center-hit" cx="480" cy="295" r="58"
-          data-title="Holistic Approach"
-          data-body="Planning across disciplines to avoid downstream legal, tax, or administrative problems."
-          data-pill="Designed to work together"/>
-      </svg>
+<div class="container">
+    <div class="circle top" onmouseover="update('Estate: Protecting wealth through multi-generational planning and trusts.')">ESTATE</div>
+    <div class="circle right" onmouseover="update('Tax: Integrating federal policy with deal structures to maximize retention.')">TAX</div>
+    <div class="circle bottom" onmouseover="update('Business: Corporate governance, entity formation, and operational scaling.')">BUSINESS</div>
+    <div class="circle left" onmouseover="update('Real Estate: Commercial acquisitions, leasing, and title protection.')">REAL ESTATE</div>
+    
+    <div class="center-box">
+        <p id="display-text">Hover over a practice area to see how our strategies intersect.</p>
     </div>
-  </div>
+</div>
 
-  <script>
-    const panel = document.getElementById('panel');
-    document.querySelectorAll('.edge-hit, .center-hit').forEach(el => {
-      el.addEventListener('click', () => {
-        panel.innerHTML = `
-          <h3>${el.dataset.title}</h3>
-          <p>${el.dataset.body}</p>
-          <div class="pill">${el.dataset.pill}</div>
-        `;
-      });
-    });
-  </script>
+<script>
+    function update(text) {
+        document.getElementById('display-text').innerHTML = text;
+    }
+</script>
+
 </body>
 </html>
